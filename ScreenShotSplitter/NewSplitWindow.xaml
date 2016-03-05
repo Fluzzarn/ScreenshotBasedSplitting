@@ -1,0 +1,21 @@
+﻿<Window x:Class="ScreenShotSplitter.NewSplitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScreenShotSplitter"
+        mc:Ignorable="d"
+        Title="NewSplitWindow" Height="300" Width="300">
+    <Grid>
+        <TextBlock x:Name="BoxTitleName" HorizontalAlignment="Left" Margin="123,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="New Split"/></TextBlock>
+        <TextBox x:Name="SplitNameTextBox" HorizontalAlignment="Left" Height="23" Margin="77,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="205"/>
+        <TextBox x:Name="imageTextBox" HorizontalAlignment="Left" Height="23" Margin="77,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" TextChanged="imageTextBox_TextChanged"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="148" Margin="10,87,0,0" VerticalAlignment="Top" Width="272"/>
+        <Button x:Name="SaveSplitButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,240,0,0"/>
+        <Button x:Name="QuitButton" Content="Quit Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="207,239,0,0" Click="QuitButton_Click"/>
+        <Button x:Name="BrowseButton" Content="..." HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Margin="242,59,0,0" Click="BrowseButton_Click"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Image Path:" VerticalAlignment="Top" Margin="10,63,0,0"/>
+        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="Split Name:" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
