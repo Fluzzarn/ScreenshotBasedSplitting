@@ -33,6 +33,7 @@ namespace ScreenShotSplitter
         private void imageTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string path = imageTextBox.Text;
+            _currentSplit = null;
             if(File.Exists(path))
             {
                 try
@@ -47,6 +48,7 @@ namespace ScreenShotSplitter
                     bi.EndInit();
 
                     image.Source = bi;
+                    _currentSplit = new Split();
                     _currentSplit.SplitName = SplitNameTextBox.Text;
                     _currentSplit.SplitImage = image.Source;
                 }
@@ -71,6 +73,12 @@ namespace ScreenShotSplitter
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void SaveSplitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(_currentSplit != null)
+            MainWindow.splits.AddSplit(_currentSplit);
         }
     }
 }

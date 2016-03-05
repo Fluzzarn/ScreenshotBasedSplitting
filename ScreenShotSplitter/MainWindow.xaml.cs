@@ -28,6 +28,8 @@ namespace ScreenShotSplitter
     {
         VideoCaptureDevice videoSource;
         FilterInfoCollection Sources;
+
+        public static Splits splits;
         public MainWindow()
         {
             InitializeComponent();

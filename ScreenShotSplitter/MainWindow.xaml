@@ -14,6 +14,7 @@
                     <ComboBox x:Name="comboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,10,0,0" SelectionChanged="comboBox_SelectionChanged"/>
                     <Image x:Name="image" HorizontalAlignment="Left" Height="224" Margin="10,37,0,0" VerticalAlignment="Top" Width="471"/>
                     <Button x:Name="button" Content="New Split" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="406,10,0,0" Click="button_Click"/>
+                    <TextBlock x:Name="currentSplitTextblock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Current Split:" VerticalAlignment="Top" Margin="135,10,0,0"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
