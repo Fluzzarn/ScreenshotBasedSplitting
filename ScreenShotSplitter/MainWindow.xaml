@@ -15,8 +15,7 @@
                     <Image x:Name="image" HorizontalAlignment="Left" Height="224" Margin="10,37,0,0" VerticalAlignment="Top" Width="471"/>
                     <Button x:Name="button" Content="New Split" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="406,10,0,0" Click="button_Click"/>
                     <TextBlock x:Name="currentSplitTextblock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Current Split:" VerticalAlignment="Top" Margin="135,10,0,0"/>
-                    <Button x:Name="runButton" HorizontalAlignment="Left" Margin="326,8,0,0" VerticalAlignment="Top" Width="75">
-                        <Button x:Name="button1" Content="Button" Width="75" Click="button1_Click"/>
+                    <Button x:Name="runButton" HorizontalAlignment="Left" Margin="326,8,0,0" VerticalAlignment="Top" Width="75" Content="Start Run" Click="button1_Click">
                     </Button>
                 </Grid>
             </TabItem>

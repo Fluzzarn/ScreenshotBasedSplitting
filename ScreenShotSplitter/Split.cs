@@ -26,6 +26,16 @@ namespace ScreenShotSplitter
             set { _splitName = value; }
         }
 
+
+        private float _threshold;
+
+        public float Threshold
+        {
+            get { return _threshold; }
+            set { _threshold = value; }
+        }
+        
+
         public Split()
         {
             _splitImage = null;
@@ -97,7 +107,15 @@ namespace ScreenShotSplitter
 
         public Split GetCurrentSplit()
         {
+            if(_currentSplit < _splits.Count)
             return _splits[_currentSplit];
+
+            return null;
+        }
+
+        public void ResetSplits()
+        {
+            _currentSplit = 0;
         }
 
     }

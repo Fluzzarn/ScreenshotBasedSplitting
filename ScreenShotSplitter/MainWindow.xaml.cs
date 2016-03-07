@@ -52,7 +52,7 @@ namespace ScreenShotSplitter
 
         private void Splits_AddedSplit(object sender, SplitsEventArgs e)
         {
-            currentSplitTextblock.Text = "Current Split: " + e.Split.SplitName;
+
         }
 
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -77,13 +77,42 @@ namespace ScreenShotSplitter
 
                 if(_isRunning)
                 {
-                    //compare with current split
-                    ExhaustiveTemplateMatching tm = new ExhaustiveTemplateMatching(0);
-                    ImageSourceConverter c = new ImageSourceConverter();
-                    Bitmap converted = BitmapImage2Bitmap(splits.GetCurrentSplit().SplitImage as BitmapImage);
-                    TemplateMatch[] matchings = tm.ProcessImage((Bitmap)eventArgs.Frame.Clone(),converted );
+                    Split currentSplit = splits.GetCurrentSplit();
 
-                    Console.WriteLine(matchings[0].Similarity) ;
+                    if(currentSplit == null)
+                    {
+                        Console.WriteLine("No more splits found");
+                        _isRunning = false;
+                        return;
+                    }
+
+                    Bitmap converted = BitmapImage2Bitmap(splits.GetCurrentSplit().SplitImage as BitmapImage);
+                    
+                    try
+                    {
+                        //compare with current split
+                        ExhaustiveTemplateMatching tm = new ExhaustiveTemplateMatching(0);
+                        ImageSourceConverter c = new ImageSourceConverter();
+
+                        TemplateMatch[] matchings = tm.ProcessImage((Bitmap)eventArgs.Frame.Clone(), converted);
+
+                            Console.WriteLine(matchings[0].Similarity   );
+                        if(matchings[0].Similarity >= 1.0f - splits.GetCurrentSplit().Threshold)
+                        {
+
+                            splits.GotoNextSplit();
+                            Dispatcher.BeginInvoke(new ThreadStart(delegate
+                            {
+                                UpdateSplitText(splits.GetCurrentSplit());
+                            }));
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Incorrected Image Dimensions!\nCaptured Dimensions: " + img.Width + " , " + img.Height + "\nSplit Dimensions: " + converted.Width + " , " + converted.Height, "Incorrect Dimensions!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        _isRunning = false;
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -165,6 +194,13 @@ namespace ScreenShotSplitter
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             _isRunning = !_isRunning;
+            splits.ResetSplits();
+            UpdateSplitText(splits.GetCurrentSplit());
+        }
+
+        private void UpdateSplitText(Split e)
+        {
+            currentSplitTextblock.Text = "Current Split: " + e.SplitName;
         }
     }
 }

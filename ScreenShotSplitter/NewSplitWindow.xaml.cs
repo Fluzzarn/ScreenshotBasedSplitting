@@ -81,7 +81,13 @@ namespace ScreenShotSplitter
         private void SaveSplitButton_Click(object sender, RoutedEventArgs e)
         {
             if(_currentSplit != null)
-            _splits.AddSplit(_currentSplit);
+            {
+                _currentSplit.SplitName = SplitNameTextBox.Text ;
+                _currentSplit.Threshold = (float)Convert.ToDouble(thresholdCounter.Text) / 100.0f;
+                _currentSplit.SplitImage = image.Source;
+                _splits.AddSplit(_currentSplit);
+
+            }
         }
     }
 }
