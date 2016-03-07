@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace ScreenShotSplitter
 {
-    class Split
+    public class Split
     {
 
         private ImageSource _splitImage;
@@ -40,13 +40,18 @@ namespace ScreenShotSplitter
     }
 
 
-    class Splits
+    public class Splits
     {
         private List<Split> _splits;
         private int _currentSplit = 0;
 
-        public delegate void OnAddedSplitEventHandler(object sender, EventArgs e);
+        public delegate void OnAddedSplitEventHandler(object sender, SplitsEventArgs e);
         public event OnAddedSplitEventHandler AddedSplit;
+
+        public Splits()
+        {
+            _splits = new List<Split>();
+        }
 
         public List<Split> CurrentSplits
         {   
@@ -55,7 +60,7 @@ namespace ScreenShotSplitter
         }
 
 
-        public void OnAdded(EventArgs e)
+        public void OnAdded(SplitsEventArgs e)
         {
             if (AddedSplit != null)
                 AddedSplit(this, e);
@@ -64,7 +69,10 @@ namespace ScreenShotSplitter
         public void AddSplit(Split s)
         {
             _splits.Add(s);
-            OnAdded(EventArgs.Empty);
+
+            SplitsEventArgs e = new SplitsEventArgs(s);
+            
+            OnAdded(e);
         }
 
         public Split GetNextSplit()
@@ -87,5 +95,26 @@ namespace ScreenShotSplitter
             _currentSplit--;
         }
 
+        public Split GetCurrentSplit()
+        {
+            return _splits[_currentSplit];
+        }
+
+    }
+
+    public class SplitsEventArgs : EventArgs
+    {
+        private Split _split;
+
+        public Split Split
+        {
+            get { return _split; }
+            private set { _split = value; }
+        }
+
+        public SplitsEventArgs(Split s)
+        {
+            _split = s;
+        }
     }
 }

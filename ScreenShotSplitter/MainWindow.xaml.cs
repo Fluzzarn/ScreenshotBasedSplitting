@@ -15,9 +15,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AForge.Video.DirectShow;
 using AForge.Video;
+using AForge.Imaging;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace ScreenShotSplitter
 {
@@ -28,11 +30,15 @@ namespace ScreenShotSplitter
     {
         VideoCaptureDevice videoSource;
         FilterInfoCollection Sources;
+        bool _isRunning;
 
-        public static Splits splits;
+
+        public Splits splits;
         public MainWindow()
         {
             InitializeComponent();
+
+            splits = new Splits();
             // enumerate video devices
             Sources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             // create video source
@@ -40,11 +46,13 @@ namespace ScreenShotSplitter
             {
                 comboBox.Items.Add(source.Name);
             }
-            // set NewFrame event handler
+            _isRunning = false;
+            splits.AddedSplit += Splits_AddedSplit;
+        }
 
-            // ...
-
-
+        private void Splits_AddedSplit(object sender, SplitsEventArgs e)
+        {
+            currentSplitTextblock.Text = "Current Split: " + e.Split.SplitName;
         }
 
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -66,6 +74,17 @@ namespace ScreenShotSplitter
                 {
                     image.Source = bi;
                 }));
+
+                if(_isRunning)
+                {
+                    //compare with current split
+                    ExhaustiveTemplateMatching tm = new ExhaustiveTemplateMatching(0);
+                    ImageSourceConverter c = new ImageSourceConverter();
+                    Bitmap converted = BitmapImage2Bitmap(splits.GetCurrentSplit().SplitImage as BitmapImage);
+                    TemplateMatch[] matchings = tm.ProcessImage((Bitmap)eventArgs.Frame.Clone(),converted );
+
+                    Console.WriteLine(matchings[0].Similarity) ;
+                }
             }
             catch (Exception ex)
             {
@@ -117,8 +136,35 @@ namespace ScreenShotSplitter
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            NewSplitWindow win = new NewSplitWindow();
+            NewSplitWindow win = new NewSplitWindow(splits);
             win.Show();
+        }
+
+
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            // BitmapImage bitmapImage = new BitmapImage(new Uri("../Images/test.png", UriKind.Relative));
+
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                
+                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+                enc.Save(outStream);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+                var bpp = new Bitmap(bitmap.Width, bitmap.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                using (Graphics gr = Graphics.FromImage(bpp))
+                {
+                    gr.DrawImage(bitmap, new System.Drawing.Rectangle(0, 0, bpp.Width, bpp.Height));
+                }
+                return bpp;
+            }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            _isRunning = !_isRunning;
         }
     }
 }

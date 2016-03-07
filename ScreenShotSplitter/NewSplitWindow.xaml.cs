@@ -24,10 +24,13 @@ namespace ScreenShotSplitter
     {
 
         private Split _currentSplit;
+        private Splits _splits;
 
-        public NewSplitWindow()
+        public NewSplitWindow(Splits s)
         {
             InitializeComponent();
+
+            _splits = s;
         }
 
         private void imageTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -78,7 +81,7 @@ namespace ScreenShotSplitter
         private void SaveSplitButton_Click(object sender, RoutedEventArgs e)
         {
             if(_currentSplit != null)
-            MainWindow.splits.AddSplit(_currentSplit);
+            _splits.AddSplit(_currentSplit);
         }
     }
 }
